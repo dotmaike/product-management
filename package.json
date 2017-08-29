@@ -1,0 +1,21 @@
+{
+  "name": "product-management",
+  "description": "",
+  "version": "0.0.0",
+  "dependencies": {
+    "react-dom": "15.6.1",
+    "react-center": "1.1.1",
+    "react": "15.6.1",
+    "lodash": "4.17.4",
+    "firebase": "4.3.0"
+  },
+  "devDependencies": {
+    "react-scripts": "^1.0.12"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
