@@ -14,12 +14,6 @@ class Products extends Component {
       inStockOnly: false,
       products: {}
     };
-
-    this.handleFilter = this.handleFilter.bind(this);
-    this.handleDestroy = this.handleDestroy.bind(this);
-    this.saveProduct = this.saveProduct.bind(this);
-    this.editProduct = this.editProduct.bind(this);
-    this.updateProduct = this.updateProduct.bind(this);
   }
 
   componentWillMount() {
@@ -30,10 +24,11 @@ class Products extends Component {
     });
   }
 
-  handleFilter(filterInput) {
+  handleFilter = (filterInput) => {
     this.setState(filterInput);
   }
-  saveProduct(product) {
+
+  saveProduct = (product) => {
     if (!product.id) {
       product.id = new Date().getTime();
     }
@@ -44,13 +39,14 @@ class Products extends Component {
     });
   }
 
-  updateProduct(newValue){
-    this.setState({
-      currentProduct:newValue.target.value,
-    });
+  updateProduct = (newValue) => {
+    this.setState(state => ({
+      ...state,
+      currentProduct: newValue.target.value,
+    }));
   }
 
-  editProduct(id, newName, newPrice, newCategory, newDate){
+  editProduct = (id, newName, newPrice, newCategory, newDate) => {
     this.setState((pstate) => {
       const copiedProducts = clone(pstate.products);
       copiedProducts[id]['name'] = newName;
@@ -63,12 +59,9 @@ class Products extends Component {
     })
   }
 
-  handleDestroy(productId) {
-    this.setState((prevState) => {
-      let products = prevState.products;
-      delete products[productId];
-      return { products };
-    });
+  handleDestroy = (productId) => {
+    const products = this.state.products.filter(product => product.id !== productId);
+    this.setState(state => ({ ...state, products }));
   }
 
   render() {
