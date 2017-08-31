@@ -16,23 +16,17 @@ class Filters extends React.Component {
   render() {
     return (
       <form>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={this.props.filterText}
-          name="filterText"
-          onChange={this.handleChange}
-        />
-        <p>
-          <input
-            type="checkbox"
-            checked={this.props.inStockOnly}
-            name="inStockOnly"
-            onChange={this.handleChange}
-          />
-          &nbsp;
-          Only show products in stock
-        </p>
+        <div className="form-group">
+          <div className="input-group">
+            <span className="input-group-addon" id="search">Search</span>
+            <input type="text" className="form-control" placeholder="Search..." aria-describedby="search" value={this.props.filterText} name="filterText" onChange={this.handleChange} />
+          </div>
+        </div>
+        <div className="checkbox">
+          <label>
+            <input type="checkbox" checked={this.props.inStockOnly} name="inStockOnly" onChange={this.handleChange} /> Only show products in stock
+          </label>
+        </div>
       </form>
     );
   }

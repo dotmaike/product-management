@@ -1,67 +1,54 @@
 import React, { Component } from 'react';
 import FB from './firebase.config';
 
-const RESET_VALUES = { id: '', category: '', price: '', stocked: false, name: '', date: '' };
-
 class ProductForm extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
     this.state = {
-      product: Object.assign({}, RESET_VALUES),
+      product: {
+        id: '',
+        category: '',
+        price: '',
+        stocked: false,
+        name: '',
+        date: ''
+      },
       errors: {},
       showingAddForm: false
     };
-    this.add = this.add.bind(this);
   }
 
-  componentWillMount() {
-    const db  = FB.database();
-    const rootRef = db.ref().child('products');
-    rootRef.on('value', snap => {
-      this.setState(state => ({ ...state, products: snap.val() }));
-    });
-    /* this.firebaseRef = firebase.database().ref('products');
-    this.firebaseRef.on("child_added", function (dataSnapshot) {
-      this.products.push(dataSnapshot.val());
-      this.setState({
-        products: this.products
-      });
-    }.bind(this)); */
+  getGuid = () => {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    const product = Object.assign({}, this.state.product);
+    product[name] = value;
+    product.id = this.getGuid();
+    this.setState(state => ({ ...state, product }));
+  }
 
-    this.setState((prevState) => {
-      prevState.product[name] = value;
-      return { product: prevState.product };
-    });
+  handleSave = () => {
+    const db = FB.database();
+    const rootRef = db.ref().child('products');
+    rootRef.push(this.state.product);
   }
-  /*
-  handleSave(e) {
-    var form = e.target.closest( 'form' );
-    if( form.checkValidity() ) {
-      e.preventDefault();
-      this.props.onSave(this.state.product);
-      this.setState({
-        product: Object.assign({}, RESET_VALUES),
-        errors: {}
-      });
-    }
-  }
-  */
+
   toggleAddForm = () => {
     this.setState((pstate) => ({
       showingAddForm: !pstate.showingAddForm
     }))
   }
 
-  add() {
-    return (<form>
+  add = () => (
+    <form>
       <h3>Enter a new product</h3>
       <p>
         <label>
@@ -97,27 +84,14 @@ class ProductForm extends Component {
           &nbsp;In stock?
           </label>
       </p>
-      <input type="submit" value="Save" onClick={this.handleSave} />
-    </form>);
-  }
-
-  handleSave(e) {
-    e.preventDefault();
-    var newProduct = {
-      name: this.state.name,
-      category: this.state.category,
-      price: this.state.price,
-      date: this.state.date,
-      isStocked: this.state.isStocked
-    }
-    this.firebaseRef.push(newProduct);
-    this.setState({ name: '', category: '', price: '', date: '', isStocked: 'false' });
-  }
+      <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
+    </form>
+  );
 
   render() {
     return (
       <div>
-        <button onClick={this.toggleAddForm}>Add</button>
+        <button type="button" className="btn btn-primary" onClick={this.toggleAddForm}>Add</button>
         {this.state.showingAddForm && this.add()}
       </div>
     );

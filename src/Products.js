@@ -66,7 +66,7 @@ class Products extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <Filters
           filterText={this.state.filterText}
           inStockOnly={this.state.inStockOnly}
@@ -79,7 +79,7 @@ class Products extends Component {
           onDestroy={this.handleDestroy}
           editProduct={this.editProduct}
         ></ProductTable>
-        <ProductForm onSave={this.saveProduct} ></ProductForm>
+        <ProductForm onSave={this.saveProduct} />
       </div>
     );
   }
