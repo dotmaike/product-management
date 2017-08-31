@@ -12,7 +12,8 @@ class Products extends Component {
     this.state = {
       filterText: '',
       inStockOnly: false,
-      products: {}
+      products: {},
+      toggleShowForm: false
     };
   }
 
@@ -60,8 +61,19 @@ class Products extends Component {
   }
 
   handleDestroy = (productId) => {
-    const products = this.state.products.filter(product => product.id !== productId);
+    const products = Object.assign({}, this.state.products);
+    const product = Object.keys(this.state.products).filter(product => this.state.products[product].id === productId);
+    delete products[product[0]];
+    const db  = FB.database();
+    db.ref().child('products').child(product[0]).remove();
     this.setState(state => ({ ...state, products }));
+  }
+
+  toggleShowForm = () => {
+    this.setState(state => ({
+      ...state,
+      toggleShowForm: !state.toggleShowForm
+    }))
   }
 
   render() {
@@ -72,6 +84,7 @@ class Products extends Component {
           inStockOnly={this.state.inStockOnly}
           onFilter={this.handleFilter}
         ></Filters>
+        <hr />
         <ProductTable
           products={this.state.products}
           filterText={this.state.filterText}
@@ -79,7 +92,10 @@ class Products extends Component {
           onDestroy={this.handleDestroy}
           editProduct={this.editProduct}
         ></ProductTable>
-        <ProductForm onSave={this.saveProduct} />
+        <hr />
+        <button type="button" className="btn btn-primary" onClick={this.toggleShowForm}>Add</button>
+        <hr />
+        {this.state.toggleShowForm && <ProductForm onSave={this.saveProduct} />}
       </div>
     );
   }

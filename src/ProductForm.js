@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FB from './firebase.config';
+import './ProductForm.css';
 
 class ProductForm extends Component {
   constructor(props) {
@@ -13,8 +14,7 @@ class ProductForm extends Component {
         name: '',
         date: ''
       },
-      errors: {},
-      showingAddForm: false
+      errors: {}
     };
   }
 
@@ -41,58 +41,42 @@ class ProductForm extends Component {
     rootRef.push(this.state.product);
   }
 
-  toggleAddForm = () => {
-    this.setState((pstate) => ({
-      showingAddForm: !pstate.showingAddForm
-    }))
-  }
-
-  add = () => (
-    <form>
-      <h3>Enter a new product</h3>
-      <p>
-        <label>
-          Name
-            <br />
-          <input type="text" name="name" onChange={this.handleChange} value={this.state.product.name} required />
-        </label>
-      </p>
-      <p>
-        <label>
-          Category
-            <br />
-          <input type="text" name="category" onChange={this.handleChange} value={this.state.product.category} required />
-        </label>
-      </p>
-      <p>
-        <label>
-          Price
-            <br />
-          <input type="text" name="price" onChange={this.handleChange} value={this.state.product.price} required />
-        </label>
-      </p>
-      <p>
-        <label>
-          Date
-            <br />
-          <input type="date" name="date" onChange={this.handleChange} value={this.state.product.date} />
-        </label>
-      </p>
-      <p>
-        <label>
-          <input type="checkbox" name="stocked" onChange={this.handleChange} checked={this.state.product.stocked} />
-          &nbsp;In stock?
-          </label>
-      </p>
-      <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
-    </form>
-  );
-
   render() {
     return (
-      <div>
-        <button type="button" className="btn btn-primary" onClick={this.toggleAddForm}>Add</button>
-        {this.state.showingAddForm && this.add()}
+      <div className="panel panel-success">
+        <div className="panel-heading">
+          <h3 className="panel-title">Enter a new product</h3>
+        </div>
+        <div className="panel-body">
+          <form>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input className="form-control" type="text" name="name" onChange={this.handleChange} value={this.state.product.name} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="category">Category</label>
+              <input className="form-control" type="text" name="category" onChange={this.handleChange} value={this.state.product.category} required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="price">Price</label>
+              <div className="input-group">
+                <span className="input-group-addon">$</span>
+                <input className="form-control" type="number" name="price" onChange={this.handleChange} value={this.state.product.price} required />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="date">Date</label>
+              <input className="form-control" type="date" name="date" onChange={this.handleChange} value={this.state.product.date} />
+            </div>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" name="stocked" onChange={this.handleChange} checked={this.state.product.stocked} />
+                In stock?
+              </label>
+            </div>
+            <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
+          </form>
+        </div>
       </div>
     );
   }

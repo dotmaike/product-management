@@ -15,8 +15,8 @@ class ProductRow extends React.Component {
   	}))
   }
 
-  updateProduct = (evt) => {
-    evt.preventDefault();
+  updateProduct = (e) => {
+    e.preventDefault();
     this.props.editProduct(this.props.product.id, this.state.newName);
 
     this.setState({
@@ -24,15 +24,17 @@ class ProductRow extends React.Component {
     })
   }
 
-  handleNameChange = (event) => {
+  handleNameChange = (e) => {
     this.setState({
-      newName: event.target.value
+      newName: e.target.value
     })
   }
 
   destroy = () => {
     this.props.onDestroy(this.props.product.id);
   }
+
+  toCurrency = (price) => (price.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
 
   renderForm = () => (
   	<form onSubmit={this.updateProduct}>
@@ -42,12 +44,12 @@ class ProductRow extends React.Component {
           <input type="date" defaultValue={this.props.product.date} />
       <button type="submit">Update</button>
 	  </form>
-	);
+  );
 
   renderItem = () => (
   	<tr>
         <td>{this.props.product.name}</td>
-        <td>{this.props.product.price}</td>
+        <td>${this.toCurrency(this.props.product.price)}</td>
         <td>{this.props.product.category}</td>
         <td>{this.props.product.date}</td>
         <td><button onClick={this.destroy}>Delete</button></td>
